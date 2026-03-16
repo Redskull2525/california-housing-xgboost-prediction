@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import numpy as np
+import xgboost 
 
 # Page configuration
 st.set_page_config(page_title="California House Price Prediction", layout="wide")
