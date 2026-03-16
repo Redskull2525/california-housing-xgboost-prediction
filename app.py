@@ -1,22 +1,29 @@
 import streamlit as st
-import pickle
 import numpy as np
+import pickle
 
-# Page config
-st.set_page_config(page_title="California Housing Price Predictor",
-                   page_icon="🏠",
-                   layout="wide")
+# Page configuration
+st.set_page_config(
+    page_title="California Housing Price Prediction",
+    page_icon="🏠",
+    layout="wide"
+)
 
-# Load model
-with open("xgboost.pkl", "rb") as file:
-    model = pickle.load(file)
+# Load trained model
+@st.cache_resource
+def load_model():
+    with open("xgboost.pkl", "rb") as file:
+        model = pickle.load(file)
+    return model
+
+model = load_model()
 
 # Title
 st.title("🏠 California Housing Price Prediction")
-st.write("Predict house prices using an XGBoost Machine Learning model.")
+st.write("Predict the median house price using an XGBoost Machine Learning model.")
 
-# Sidebar
-st.sidebar.header("Input Housing Features")
+# Sidebar inputs
+st.sidebar.header("Enter Housing Features")
 
 med_inc = st.sidebar.number_input("Median Income", min_value=0.0, value=3.0)
 house_age = st.sidebar.number_input("House Age", min_value=0, value=20)
@@ -27,25 +34,29 @@ ave_occup = st.sidebar.number_input("Average Occupancy", min_value=0.0, value=3.
 latitude = st.sidebar.number_input("Latitude", value=34.0)
 longitude = st.sidebar.number_input("Longitude", value=-118.0)
 
-# Input array
+# Create feature array
 features = np.array([[med_inc, house_age, ave_rooms, ave_bedrooms,
                       population, ave_occup, latitude, longitude]])
 
-# Prediction
+# Prediction button
 if st.button("Predict House Price"):
 
     prediction = model.predict(features)
 
-    st.subheader("Predicted House Price")
-    st.success(f"${prediction[0]*100000:,.2f}")
+    st.subheader("Predicted Median House Price")
 
-# Info section
+    # Multiply because dataset values are in 100k
+    price = prediction[0] * 100000
+
+    st.success(f"Estimated House Price: ${price:,.2f}")
+
+# Footer
 st.markdown("---")
 st.write("### About the Model")
 st.write("""
 This application uses an **XGBoost Regressor** trained on the California Housing dataset.
 
-Features used:
+Features used in prediction:
 - Median Income
 - House Age
 - Average Rooms
