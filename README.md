@@ -97,7 +97,7 @@ california-housing-xgboost-prediction
 ### 1️⃣ Clone the repository
 
 ```
-git clone https://github.com/yourusername/california-housing-xgboost-prediction.git
+git clone https://github.com/Redskull2525/california-housing-xgboost-prediction.git
 ```
 
 ### 2️⃣ Install dependencies
