@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
-import pickle
+import joblib 
+
 
 # Page configuration
 st.set_page_config(
