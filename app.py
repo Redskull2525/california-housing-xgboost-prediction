@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
-import joblib 
-
+import joblib   # FIX: import joblib
 
 # Page configuration
 st.set_page_config(
@@ -13,12 +12,10 @@ st.set_page_config(
 # Load trained model
 @st.cache_resource
 def load_model():
-    with open("xgboost.pkl", "rb") as file:
-        model = pickle.load(file)
+    model = joblib.load("xgboost.pkl")
     return model
 
-model = joblib.load("xgboost.pkl")
-
+model = load_model()
 
 # Title
 st.title("🏠 California Housing Price Prediction")
@@ -36,18 +33,17 @@ ave_occup = st.sidebar.number_input("Average Occupancy", min_value=0.0, value=3.
 latitude = st.sidebar.number_input("Latitude", value=34.0)
 longitude = st.sidebar.number_input("Longitude", value=-118.0)
 
-# Create feature array
+# Feature array
 features = np.array([[med_inc, house_age, ave_rooms, ave_bedrooms,
                       population, ave_occup, latitude, longitude]])
 
-# Prediction button
+# Prediction
 if st.button("Predict House Price"):
 
     prediction = model.predict(features)
 
     st.subheader("Predicted Median House Price")
 
-    # Multiply because dataset values are in 100k
     price = prediction[0] * 100000
 
     st.success(f"Estimated House Price: ${price:,.2f}")
