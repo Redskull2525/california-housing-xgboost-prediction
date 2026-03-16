@@ -16,7 +16,8 @@ def load_model():
         model = pickle.load(file)
     return model
 
-model = load_model()
+model = joblib.load("xgboost.pkl")
+
 
 # Title
 st.title("🏠 California Housing Price Prediction")
